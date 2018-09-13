@@ -2,12 +2,11 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Your Website</title>
+    <title>Maslov </title>
     <style>
         div {
             display: flex;
             justify-content: center;
-
         }
 
         div.ok {
@@ -61,46 +60,48 @@
 
             })
 
-            //$('input').change(loop);
-            //tak jest w webie, w hardware jest loop na interwale
+            $('input').change(function () {
+                $('input').each(function () {
+                    let $this = $(this);
+                    let data = $this.data();
+                    let checked = $this.is(":checked");
+                    arr[data.x][data.y] = checked ? 1 : 0;
+                })
+            });
         }
 
         function loop() {
 
-            $('input').each(function () {
-                let $this = $(this);
-                let data = $this.data();
-                let checked = $this.is(":checked");
-                arr[data.x][data.y] = checked ? 1 : 0;
-            })
+            // analizuje arr 
+            // i reneruje tablice diody 
 
             let diody = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
-                let sum = value.sum() ;
-                if (sum == 0) {
-                    return 0;
-                } else if (sum == value.length) {
-                    return 2;
-                } else {
-                    return 1;
-                }
-            }) 
-            .reverse() // odwrata tablice
-            .map((dioda, index, array) => { // sprawdza czy sa po kolei 
-                if (index == 0) {
-                    return dioda
-                }
-                let prevDioda = array[index-1];
-                if (prevDioda == 2 && dioda == 2) { // jezeli poprzedni rzad  jest 2 i ten jest  2 to ok
-                    return 2;
-                }
-                dioda = dioda == 2 ? 1 : dioda; // jezeli ten jest 2 to zamien na 1
-                return dioda;
-            });
+                    let sum = value.sum();
+                    if (sum == 0) {
+                        return 0;
+                    } else if (sum == value.length) {
+                        return 2;
+                    } else {
+                        return 1;
+                    }
+                })
+                .reverse() // odwrata tablice
+                .map((dioda, index, array) => { // sprawdza czy sa po kolei 
+                    if (index == 0) {
+                        return dioda
+                    }
+                    let prevDioda = array[index - 1];
+                    if (prevDioda == 2 && dioda == 2) { // jezeli poprzedni rzad  jest 2 i ten jest  2 to ok
+                        return 2;
+                    }
+                    dioda = dioda == 2 ? 1 : dioda; // jezeli ten jest 2 to zamien na 1
+                    return dioda;
+                });
 
-            diody.forEach((dioda,i, array) => { // zaznacz diody 
-                let $div = $('div').eq((array.length -1) - i);
+            diody.forEach((dioda, i, array) => { // zaznacz diody 
+                let $div = $('div').eq((array.length - 1) - i);
                 $div.removeAttr('class');
-                switch(dioda) {
+                switch (dioda) {
                     case 2: // zielony 
                         $div.addClass('ok')
                         break;
@@ -127,7 +128,6 @@
         init();
 
         setInterval(loop, 250);
-
     </script>
 
 </body>
