@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Your Website</title>
+    <style>
+        div {
+            display: flex;
+            justify-content: center;
+
+        }
+
+        div.ok {
+            background: green;
+        }
+
+        div.fail {
+            background: red;
+        }
+
+        input {
+            padding: 3px;
+            margin: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- start with `$ php -S localhost:8000`-->
+    <main></main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        //** pomoc do sumowania tablic
+        Array.prototype.sum = function () {
+            return this.reduce(function (previousValue, currentValue, index, array) {
+                return previousValue + currentValue;
+            });
+        }
+
+        let arr = [
+            [0],
+            [0, 0],
+            [0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+
+        let isWon = false;
+
+        function init() {
+
+            arr.forEach((row, x) => {
+                let $div = $('<div></div>');
+                $('main').append($div);
+                row.forEach((i, y) => {
+                    $div.append(
+                        `<input type="checkbox" maxlength="1" data-x="${x}" data-y="${y}" " pattern="[0-5]{1}"/>`
+                    );
+                })
+
+            })
+
+            //$('input').change(loop);
+            //tak jest w webie, w hardware jest loop na interwale
+        }
+
+        function loop() {
+
+            $('input').each(function () {
+                let $this = $(this);
+                let data = $this.data();
+                let checked = $this.is(":checked");
+                arr[data.x][data.y] = checked ? 1 : 0;
+            })
+
+            let diody = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
+                let sum = value.sum() ;
+                if (sum == 0) {
+                    return 0;
+                } else if (sum == value.length) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }) 
+            .reverse() // odwrata tablice
+            .map((dioda, index, array) => { // sprawdza czy sa po kolei 
+                if (index == 0) {
+                    return dioda
+                }
+                let prevDioda = array[index-1];
+                if (prevDioda == 2 && dioda == 2) { // jezeli poprzedni rzad  jest 2 i ten jest  2 to ok
+                    return 2;
+                }
+                dioda = dioda == 2 ? 1 : dioda; // jezeli ten jest 2 to zamien na 1
+                return dioda;
+            });
+
+            diody.forEach((dioda,i, array) => { // zaznacz diody 
+                let $div = $('div').eq((array.length -1) - i);
+                $div.removeAttr('class');
+                switch(dioda) {
+                    case 2: // zielony 
+                        $div.addClass('ok')
+                        break;
+                    case 1: // czerowyny
+                        $div.addClass('fail')
+                        break;
+                    case 0: // pusty
+                    default:
+                }
+
+            })
+
+            let w = diody.sum() == diody.length * 2;
+
+            if (w != isWon) {
+                isWon = w;
+                if (w) {
+                    alert('wygrales');
+                }
+            }
+
+        }
+
+        init();
+
+        setInterval(loop, 250);
+
+    </script>
+
+</body>
