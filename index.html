@@ -49,41 +49,69 @@
 
         function init() {
 
-            arr.forEach((row, x) => {
+            arr.forEach((row, y) => {
                 let $div = $('<div></div>');
                 $('main').append($div);
-                row.forEach((i, y) => {
+                row.forEach((i, x) => {
                     $div.append(
-                        `<input type="checkbox" maxlength="1" data-x="${x}" data-y="${y}" " pattern="[0-5]{1}"/>`
+                        `<select data-x="${x}" data-y="${y}">
+                            <option>x</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>`
+
+                        //`<input type="checkbox" maxlength="1" data-x="${x}" data-y="${y}" " pattern="[0-5]{1}"/>`
                     );
                 })
 
             })
 
-            $('input').change(function () {
-                $('input').each(function () {
-                    let $this = $(this);
-                    let data = $this.data();
-                    let checked = $this.is(":checked");
-                    arr[data.x][data.y] = checked ? 1 : 0;
-                })
+            $('select').change(function () {
+                let $this = $(this);
+                let data = $this.data();
+                let val = $this.val();
+                switch (val) {
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                        arr[data.y][data.x] = parseInt(val) == data.y + 1 ? 1 : -1;
+                        break;
+                    case "x":
+                    default:
+                    arr[data.y][data.x] = 0;
+                }
+
+                //loop();
             });
         }
 
         function loop() {
 
-            // analizuje arr 
-            // i reneruje tablice diody 
-
             let diody = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
-                    let sum = value.sum();
-                    if (sum == 0) {
-                        return 0;
-                    } else if (sum == value.length) {
-                        return 2;
-                    } else {
+
+                    let ilosc_zaznaczoncyh = value.filter(i => i != 0).length
+                    let ilosc_poprawnych = value.filter(i => i == 1).length;
+                    let ilosc_niepoprawnych = value.filter(i => i == -1).length;
+
+                    if (ilosc_niepoprawnych > 0) {
                         return 1;
                     }
+
+                    if (ilosc_zaznaczoncyh == value.length) {
+                        if (ilosc_poprawnych == value.length) {
+                            return 2; // rzad jest ok
+                        }
+                        return 1; // nie jest ok
+                    }
+
+                    return 0; // nie sa wszystkie polozone klocki 
+
+          
                 })
                 .reverse() // odwrata tablice
                 .map((dioda, index, array) => { // sprawdza czy sa po kolei 
@@ -96,11 +124,18 @@
                     }
                     dioda = dioda == 2 ? 1 : dioda; // jezeli ten jest 2 to zamien na 1
                     return dioda;
+                })
+                .map((dioda, index, array) => { // sprawdza czy sa po kolei 
+                    if (index && array[index -1] != 2) {
+                        return 0;//tylko sprawdzaj jezeli poprzedni rzad jest zielony
+                    }
+                    return dioda;
                 });
 
             diody.forEach((dioda, i, array) => { // zaznacz diody 
-                let $div = $('div').eq((array.length - 1) - i);
+                let $div = $('div').eq((array.length - 1) - i);                
                 $div.removeAttr('class');
+                
                 switch (dioda) {
                     case 2: // zielony 
                         $div.addClass('ok')
