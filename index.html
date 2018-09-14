@@ -100,9 +100,7 @@
 
                     if (ilosc_niepoprawnych > 0) {
                         return 1;
-                    }
-
-                    
+                    }                    
 
                     if (ilosc_zaznaczoncyh == value.length) {
                         if (ilosc_poprawnych == value.length) {
@@ -115,9 +113,7 @@
                         return 3;// klocek jest polozony w dobrym rzedzie ale trzeba sprawdzic czy porzedni rzad jest ok, bo jak nie to ma czerwono go 
                     }
 
-
                     return 0; // nie sa wszystkie polozone klocki 
-
           
                 })
                 .reverse() // odwrata tablice
