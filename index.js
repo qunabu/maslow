@@ -17,7 +17,7 @@ var mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
 
 const Gpio = require('onoff').Gpio;
 
-
+const IS_DEBUG = process.argv.indexOf('debug') != -1;
 
 const ledPins = [
 	[new Gpio(26, 'out'),new Gpio(22, 'out')],
@@ -33,7 +33,6 @@ process.on('SIGINT', () => {
 		pins[1].unexport();
 	})
 });
-
 
 let arr = [
 /*0*/	[0,0],
@@ -107,11 +106,11 @@ function fetchValues() {
 
 function convertValuesToArr() {
 	let results = fetchValues().map((row,y) => row.map((value,x) => valueForRow(y, value)));
-	//console.log('results', results);
+	
+	if (IS_DEBUG) { console.log('results', results); }
+	
 	return results;
 }
-
-
 
 function loop() {
 	leds(analizeValues(convertValuesToArr()));
@@ -119,7 +118,7 @@ function loop() {
 
 function leds(diody) {
 
-	console.log('leds', diody);
+	if (IS_DEBUG) {  console.log('leds', diody); }
 
 	diody.forEach((dioda, ii) => {
 		let i = (diody.length - 1) - ii;
@@ -141,8 +140,7 @@ function leds(diody) {
 	})		
 }
 
-function analizeValues(arr) {
-	
+function analizeValues(arr) {	
 	
 	let results = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
 
@@ -200,27 +198,22 @@ function analizeValues(arr) {
 	})
 
 	/** jezeil przynajmniej jedna dioda jest na czerwono to te zielone tez na czerwono */
-	
-	//console.log(diody);
-	
+		
 	if (results.indexOf(1) != -1) {
 		results = results.map(dioda => dioda > 1 ? 1 : dioda);
 	}
 	
 	return results;
 
-
 }
 
 
-setInterval(loop, 100);
-
-
+setInterval(loop, 1000);
 
 /** DEBUG */
 
-if (process.argv.indexOf('debug') != -1) {
-	setInterval(() => console.log(fetchValues()), 100);
+if (IS_DEBUG) {
+	setInterval(() => console.log('values from read', fetchValues()), 100);
 }
 
 /** helper functions */
