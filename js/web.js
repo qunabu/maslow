@@ -5,6 +5,8 @@ let blocksState = initState.slice();
 function getChange() {
 
     let newBlockState = convertValuesToArr(fetchValues());
+	
+	console.log(fetchValues());
 
     let change = findDifference(blocksState, newBlockState);
 
@@ -73,7 +75,7 @@ function init(state = blocksState) {
         row.forEach((i, x) => {
             $div.append(
                 `<select data-x="${x}" data-y="${y}">
-                    <option>x</option>
+                    <option value=0>x</option>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -119,35 +121,69 @@ function valueForRow(y, value) {
 
 }
 
-function fetchValues() {
-    let values = [
-        [0, 0],
-        [0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0]
-    ]; // copy of the original array structure;
+let avrValues = initState.map((row,y) => {
+	return row.map((col,x) => {
+		return [];
+	});
+})
 
-    values[4][5] = $('select[data-x=5][data-y=4]').val();
-    values[4][4] = $('select[data-x=4][data-y=4]').val();
-    values[4][3] = $('select[data-x=3][data-y=4]').val();
-    values[4][2] = $('select[data-x=2][data-y=4]').val();
-    values[4][1] = $('select[data-x=1][data-y=4]').val();
-    values[4][0] = $('select[data-x=0][data-y=4]').val();
-    values[3][4] = $('select[data-x=4][data-y=3]').val();
-    values[3][3] = $('select[data-x=3][data-y=3]').val();
-    values[3][2] = $('select[data-x=2][data-y=3]').val();
-    values[3][1] = $('select[data-x=1][data-y=3]').val();
-    values[3][0] = $('select[data-x=0][data-y=3]').val();
-    values[2][3] = $('select[data-x=3][data-y=2]').val();
-    values[2][2] = $('select[data-x=2][data-y=2]').val();
-    values[2][1] = $('select[data-x=1][data-y=2]').val();
-    values[2][0] = $('select[data-x=0][data-y=2]').val();
-    values[1][2] = $('select[data-x=2][data-y=1]').val();
-    values[1][1] = $('select[data-x=1][data-y=1]').val();
-    values[1][0] = $('select[data-x=0][data-y=1]').val();
-    values[0][1] = $('select[data-x=1][data-y=0]').val();
-    values[0][0] = $('select[data-x=0][data-y=0]').val();
+const AVR_BREAK = 10;
+
+function fetchValues() {
+	
+
+    avrValues[4][5].push(  $('select[data-x=5][data-y=4]').val());
+    avrValues[4][4].push(  $('select[data-x=4][data-y=4]').val());
+    avrValues[4][3].push(  $('select[data-x=3][data-y=4]').val());
+    avrValues[4][2].push(  $('select[data-x=2][data-y=4]').val());
+    avrValues[4][1].push(  $('select[data-x=1][data-y=4]').val());
+    avrValues[4][0].push(  $('select[data-x=0][data-y=4]').val());
+    avrValues[3][4].push(  $('select[data-x=4][data-y=3]').val());
+    avrValues[3][3].push(  $('select[data-x=3][data-y=3]').val());
+    avrValues[3][2].push(  $('select[data-x=2][data-y=3]').val());
+    avrValues[3][1].push(  $('select[data-x=1][data-y=3]').val());
+    avrValues[3][0].push(  $('select[data-x=0][data-y=3]').val());
+    avrValues[2][3].push(  $('select[data-x=3][data-y=2]').val());
+    avrValues[2][2].push(  $('select[data-x=2][data-y=2]').val());
+    avrValues[2][1].push(  $('select[data-x=1][data-y=2]').val());
+    avrValues[2][0].push(  $('select[data-x=0][data-y=2]').val());
+    avrValues[1][2].push(  $('select[data-x=2][data-y=1]').val());
+    avrValues[1][1].push(  $('select[data-x=1][data-y=1]').val());
+    avrValues[1][0].push(  $('select[data-x=0][data-y=1]').val());
+    avrValues[0][1].push(  $('select[data-x=1][data-y=0]').val());
+    avrValues[0][0].push(  $('select[data-x=0][data-y=0]').val());
+	if (avrValues[4][5].length > AVR_BREAK) {
+		avrValues[4][5].shift( );
+		avrValues[4][4].shift( );
+		avrValues[4][3].shift( );
+		avrValues[4][2].shift( );
+		avrValues[4][1].shift( );
+		avrValues[4][0].shift( );
+		avrValues[3][4].shift( );
+		avrValues[3][3].shift( );
+		avrValues[3][2].shift( );
+		avrValues[3][1].shift( );
+		avrValues[3][0].shift( );
+		avrValues[2][3].shift( );
+		avrValues[2][2].shift( );
+		avrValues[2][1].shift( );
+		avrValues[2][0].shift( );
+		avrValues[1][2].shift( );
+		avrValues[1][1].shift( );
+		avrValues[1][0].shift( );
+		avrValues[0][1].shift( );
+		avrValues[0][0].shift( );
+	}
+	
+	return avrValues.map((row,y) => {
+		return row.map((col,x) => {
+			return col.reduce(function(previousValue, currentValue, index, array) {
+				  return parseInt(previousValue) + parseInt(currentValue);
+			}) / col.length;
+			//return col[0];
+			//return [];
+		});
+	})
     return values;
 }
 
