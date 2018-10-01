@@ -28,12 +28,12 @@
     <!-- start with `$ php -S localhost:8000`-->
     <main></main>
 
-    <script type="module" src="./js/logic.js"></script>
+    <script type="module" src="./js/logic_web.js"></script>
     <script type="module" src="./js/web.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="module">
-        import { analizeValues, setChange } from "./js/logic.js";
+        import { analizeValues, setChange } from "./js/logic_web.js";
         import { leds, init, getChange } from "./js/web.js";
 
         $('select').change(function () {

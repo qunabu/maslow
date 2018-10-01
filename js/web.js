@@ -1,4 +1,4 @@
-import { findDifference, initState } from "./logic.js";
+import { findDifference, initState } from "./logic_web.js";
 
 let blocksState = initState.slice();
 
