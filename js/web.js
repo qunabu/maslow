@@ -41,6 +41,8 @@ function leds(diody) {
         }
     });
 
+    return (diody.filter(dioda => dioda == 2).length == diody.length)
+
     /*
     diody.forEach((dioda, ii) => {
         let i = (diody.length - 1) - ii;

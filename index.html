@@ -42,7 +42,9 @@
 
         function loop() {
 
-            leds(analizeValues(setChange(getChange())));
+            if (leds(analizeValues(setChange(getChange())))) {
+                console.log('wygrales')
+            }
 
         }
 
