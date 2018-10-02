@@ -14,7 +14,7 @@ function setChange(change = null) {
         
         let newState = currentState.slice();
 
-        if (change.to == -1) {
+        if (change.to == -1 || change.to == 0) {
             /** zaznacz wszystkie do gory jako 0 */
 
             newState[change.y][change.x] = change.to;

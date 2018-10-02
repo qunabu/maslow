@@ -1,30 +1,18 @@
-
-
-const    analizeValues = require('./js/logic').analizeValues;
-const    setChange  = require('./js/logic').setChange;
+const analizeValues = require('./js/logic').analizeValues;
+const setChange  = require('./js/logic').setChange;
 
 const leds  = require('./js/hardware').leds;
-const init = require('./js/hardware').init;
 const getChange = require('./js/hardware').getChange;
-
-/*
-    import {
-   
-} from "./js/web.js";
-
-*/
+const INTERVAL = require("./js/config.js").INTERVAL;
 
 function loop() {
-
 
     leds(analizeValues(setChange(getChange())));
 
 }
 
-
-//init();
-
-//loop();
-
-
 setInterval(loop, 200);
+
+//
+// Exec=/usr/bin/node /home/pi/maslow/raspberry.js
+

@@ -1,21 +1,18 @@
-/**
- * 
- * # Software SPI configuration:
-CLK  = 18
-MISO = 23
-MOSI = 24
-CS   = 17
-
-mcp1 = Adafruit_MCP3008.MCP3008(clk=CLK, cs=17, miso=MISO, mosi=MOSI)
-mcp2 = Adafruit_MCP3008.MCP3008(clk=CLK, cs=27, miso=MISO, mosi=MOSI)
-mcp3 = Adafruit_MCP3008.MCP3008(clk=CLK, cs=25, miso=MISO, mosi=MOSI)
- */ 
-// (SPICLK, SPIMISO, SPIMOSI, SPICS, Voltage)
-var mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
-var mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
-var mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
-
+const mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
+const mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
+const mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
 const Gpio = require('onoff').Gpio;
+
+const findDifference = require("./logic.js").findDifference;
+const initState = require("./logic.js").initState;
+
+const WIN_PIN = require("./config.js").WIN_PIN;
+const PINS_MARGINS = require("./config.js").PINS_MARGINS;
+const AVR_BREAK = require("./config.js").AVR_BREAK;
+const ERROR_MARGIN = require("./config.js").ERROR_MARGIN;
+
+
+/** RESZTY KODU NIE RUSZAJCIE */
 
 const IS_DEBUG = process.argv.indexOf('debug') != -1;
 
@@ -27,11 +24,15 @@ const ledPins = [
 	[new Gpio(5, 'out'),new Gpio(4, 'out')]
 ];
 
+
+const winPin = new Gpio(WIN_PIN, 'out')
+
 process.on('SIGINT', () => {
 	ledPins.forEach(pins => {
 		pins[0].unexport();
-		pins[1].unexport();
+		pins[1].unexport();		
 	})
+	winPin.unexport();
 });
 
 let arr = [
@@ -41,6 +42,46 @@ let arr = [
 /*3*/	[0,0,0,0,0],
 /*4*/	[0,0,0,0,0,0]
 ]
+
+
+let blocksState = initState.slice();
+
+let avrValues = initState.map((row,y) => {
+	return row.map((col,x) => {
+		return [];
+	});
+})
+
+function getChange() {
+
+    let newBlockState = convertValuesToArr(fetchValues());
+
+    let change = findDifference(blocksState, newBlockState);
+
+    if (change) {
+		
+		/** catch fuckup caches 
+		 * only possiible are 
+		 *  0 -> 1 
+		 *  0 -> -1
+		 *  1 -> 0 
+		 * -1 -> 0
+		 */ 
+		 
+		let test = Math.abs(change.from) + Math.abs(change.to);
+		
+		if (test === 1) {
+			blocksState = newBlockState;        
+			console.log(change);
+			return change;
+		}
+       
+
+    }
+
+    return null;
+
+}
 
 /** 
  * i - rzad
@@ -52,17 +93,13 @@ let arr = [
  */ 
 function valueForRow(i, value) {
 	
-	//referencyjne wartosci 
-
-	//	[ [ 512, 512 ],
-	//  [ 433, 432, 432 ],
-	//  [ 511, 512, 511, 510 ],
-	//  [ 489, 492, 491, 486, 490 ],
-	//  [ 504, 505, 503, 503, 505, 503 ] ]
-
-	if (value < 20) {
+	if (value < ERROR_MARGIN) {
 		return 0; 
 	} 
+	
+	return value > PINS_MARGINS[i][0] && value < PINS_MARGINS[i][1] ? 1 : -1;
+	
+	/*
 	
 	switch (i) {
 		case 0:
@@ -76,10 +113,15 @@ function valueForRow(i, value) {
 		case 4:
 			return value > 495 && value < 525 ? 1 : -1;
 	}
+	*/ 
 		
 }
 
 function fetchValues() {
+	
+	/** TODO push values into array and remove remove tail */
+	
+	/*
 	let values = arr.slice(0);// copy of the original array structure;
 	values[4][5] = mcp1.pins[0].getDecimalValue();
     values[4][4] = mcp1.pins[1].getDecimalValue();
@@ -101,6 +143,92 @@ function fetchValues() {
     values[1][0] = mcp3.pins[1].getDecimalValue();
     values[0][1] = mcp3.pins[2].getDecimalValue();
     values[0][0] = mcp3.pins[3].getDecimalValue();
+    */ 
+    
+    avrValues[4][5].push( mcp1.pins[0].getDecimalValue() );
+    avrValues[4][4].push( mcp1.pins[1].getDecimalValue() );
+    avrValues[4][3].push( mcp1.pins[2].getDecimalValue() );
+    avrValues[4][2].push( mcp1.pins[3].getDecimalValue() );
+    avrValues[4][1].push( mcp1.pins[4].getDecimalValue() );
+    avrValues[4][0].push( mcp1.pins[5].getDecimalValue() );
+    avrValues[3][4].push( mcp1.pins[6].getDecimalValue() );
+    avrValues[3][3].push( mcp1.pins[7].getDecimalValue() );
+    avrValues[3][2].push( mcp2.pins[0].getDecimalValue() );
+    avrValues[3][1].push( mcp2.pins[1].getDecimalValue() );
+    avrValues[3][0].push( mcp2.pins[2].getDecimalValue() );
+    avrValues[2][3].push( mcp2.pins[3].getDecimalValue() );
+    avrValues[2][2].push( mcp2.pins[4].getDecimalValue() );
+    avrValues[2][1].push( mcp2.pins[5].getDecimalValue() );
+    avrValues[2][0].push( mcp2.pins[6].getDecimalValue() );
+    avrValues[1][2].push( mcp2.pins[7].getDecimalValue() );
+    avrValues[1][1].push( mcp3.pins[0].getDecimalValue() );
+    avrValues[1][0].push( mcp3.pins[1].getDecimalValue() );
+    avrValues[0][1].push( mcp3.pins[2].getDecimalValue() );
+    avrValues[0][0].push( mcp3.pins[3].getDecimalValue() );
+    
+    if (avrValues[4][5].length > AVR_BREAK) {
+		avrValues[4][5].shift( );
+		avrValues[4][4].shift( );
+		avrValues[4][3].shift( );
+		avrValues[4][2].shift( );
+		avrValues[4][1].shift( );
+		avrValues[4][0].shift( );
+		avrValues[3][4].shift( );
+		avrValues[3][3].shift( );
+		avrValues[3][2].shift( );
+		avrValues[3][1].shift( );
+		avrValues[3][0].shift( );
+		avrValues[2][3].shift( );
+		avrValues[2][2].shift( );
+		avrValues[2][1].shift( );
+		avrValues[2][0].shift( );
+		avrValues[1][2].shift( );
+		avrValues[1][1].shift( );
+		avrValues[1][0].shift( );
+		avrValues[0][1].shift( );
+		avrValues[0][0].shift( );
+	}
+	
+	/** jezeli ostatni jest wlozony na zero to wyzeruj cala historie */
+
+		
+	avrValues = avrValues.map((row,y) => {
+		return row.map((col,x) => {
+			if (col[col.length-1] < ERROR_MARGIN) {
+				return col.map(value => 0)
+			}
+			return col;
+		});
+	})
+	
+	
+	
+	return avrValues.map((row,y) => {
+		return row.map((col,x) => {
+			/** wylicz srednia, 
+			 * ale ignoruj wartosci zerowe !!!
+			 * jezeli sa same zero to zwroc zero
+			 *  */
+			
+			let result = col.filter(value => value > ERROR_MARGIN);
+			
+			if (result.length) {
+				
+				return result.reduce(function(previousValue, currentValue, index, array) {
+				  return parseInt(previousValue) + parseInt(currentValue);
+				}) / result.length;	
+				
+			} else {
+				
+				return 0;
+			}
+						
+						
+		});
+	})
+    
+    /** return avrages */
+    
     return values;
 }
 
@@ -138,6 +266,14 @@ function leds(diody) {
 			default:
 		}
 	})		
+	
+	if (diody.filter(dioda => dioda == 2).length == diody.length) {
+		winPin.writeSync(1);
+		console.log('wygrales');
+		//if (IS_DEBUG) {  console.log('wygrales'); }
+	} else {
+		winPin.writeSync(0);
+	}
 }
 
 
