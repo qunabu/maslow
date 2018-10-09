@@ -4,7 +4,7 @@ var path = require('path');
 
 //const IS_DEBUG = process.argv.indexOf('debug') != -1;
 
-require('electron-reload')(__dirname);
+//require('electron-reload')(__dirname);
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -18,10 +18,12 @@ function createWindow () {
   // and load the index.html of the app.
   let startHTML = path.join(__dirname, 'assets', 'circle.html');
 
-  mainWindow.loadFile(startHTML);
+  console.log(startHTML);
+
+  mainWindow.loadURL('file://' + startHTML);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
