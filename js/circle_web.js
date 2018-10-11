@@ -4,22 +4,41 @@ const path = require('path');
 
 const PATH = path.join(__dirname);
 const INTERVAL = require(PATH + '/../js/config').INTERVAL;
-const IS_DEBUG = true;
+const IS_DEBUG = false;
+
+
+//const fetchValues = require(PATH + '/../js//hardware_circle').fetchValues;
+const getChange = require(PATH + '/../js//hardware_circle').getChange;
+const win = require(PATH + '/../js//hardware_circle').win;
+
 const winArr = [1,1,1,1,1,2,2,2,2,2];
 let _currArr = [];
 let _currI = -1;
 
 function loop() {
-    const currArr = getCurrArr()
-    if (currArr.length) {
-        if (compare(currArr, winArr)) {
-            setI(currArr.length + 1);
-        } else {
-            wrong();
-        }
-    } else {
-        reset();
-    }
+	let change = getChange() ;
+	
+	if (change) {
+		if (change.to) {
+			pushCurrArr(change.to);
+		} else {
+			//reset();
+			popCurrArr(change.from);
+		}
+	}
+	//console.log(fetchValues());
+	const currArr = getCurrArr()
+	if (currArr.length) {
+		if (compare(currArr, winArr)) {
+			setI(currArr.length + 1);
+		} else {
+			wrong();
+		}
+	} else {
+		reset();
+	}
+	
+	
 }
 
 function compare(_arr1, _arr2) {
@@ -34,7 +53,18 @@ function pushCurrArr(i) {
     _currArr.push(i);
 }
 
+function popCurrArr(i) {
+	if (_currArr[_currArr.length -1] == i) {
+		_currArr.pop();
+	} else {
+		wrong();
+	}
+}
+
 function setI(i) {
+	
+	win(i == 11) 
+		
     if (i == _currI) {
         return 0;
     }

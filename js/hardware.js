@@ -53,6 +53,8 @@ let avrValues = initState.map((row,y) => {
 })
 
 function getChange() {
+	
+	console.log(fetchValues());
 
     let newBlockState = convertValuesToArr(fetchValues());
 

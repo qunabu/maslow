@@ -2,6 +2,11 @@
 const {app, BrowserWindow} = require('electron')
 var path = require('path');
 
+const PATH = path.join(__dirname);
+//const fetchValues = require(PATH + '/js/hardware_circle').fetchValues;
+//const getChange = require(PATH + '/js/hardware_circle').getChange;
+
+
 //const IS_DEBUG = process.argv.indexOf('debug') != -1;
 
 //require('electron-reload')(__dirname);
@@ -12,18 +17,36 @@ var path = require('path');
 let mainWindow
 
 function createWindow () {
+	
+	//console.log('hi');
+	
+	/*
+	setInterval(() => {
+		let change = getChange();
+		if (change) {
+			console.log(change);
+		}
+	}, 500);
+	* 
+	*/ 
+	
+	//return;
+	
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1024, height: 600})
+  mainWindow = new BrowserWindow({width: 1024, height: 600, frame: false, fullscreen:true})
+  //mainWindow.show();
 
   // and load the index.html of the app.
   let startHTML = path.join(__dirname, 'assets', 'circle.html');
 
-  console.log(startHTML);
+  //console.log(startHTML);
+  
+  //console.log(mainWindow);
 
   mainWindow.loadURL('file://' + startHTML);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
