@@ -72,7 +72,9 @@ function getChange() {
 		
 		if (test === 1) {
 			blocksState = newBlockState;        
-			console.log(change);
+			
+			change.state = newBlockState;
+			
 			return change;
 		}
        
@@ -191,16 +193,29 @@ function fetchValues() {
 	
 	/** jezeli ostatni jest wlozony na zero to wyzeruj cala historie */
 
+
+	
+	avrValues = avrValues.map((col,y) => {
 		
-	avrValues = avrValues.map((row,y) => {
-		return row.map((col,x) => {
-			if (col[col.length-1] < ERROR_MARGIN) {
-				return col.map(value => 0)
+
+		return col.map((row, x) => {
+			if (row[row.length-1] < ERROR_MARGIN 
+			&& row[row.length-2] < ERROR_MARGIN
+			&& row[row.length-3] < ERROR_MARGIN
+			&& row[row.length-4] < ERROR_MARGIN
+			) {
+				return row.map(value => 0);
+			} else {
+				return row.map(value => value);
 			}
-			return col;
-		});
+			
+		}); 
+
 	})
 	
+	
+	
+	//console.log(avrValues);
 	
 	
 	return avrValues.map((row,y) => {
@@ -211,6 +226,10 @@ function fetchValues() {
 			 *  */
 			
 			let result = col.filter(value => value > ERROR_MARGIN);
+			
+			//let result = col;
+			
+			//console.log(result.length);
 			
 			if (result.length) {
 				
@@ -235,7 +254,7 @@ function fetchValues() {
 function convertValuesToArr() {
 	let results = fetchValues().map((row,y) => row.map((value,x) => valueForRow(y, value)));
 	
-	if (IS_DEBUG) { console.log('results', results); }
+	//if (IS_DEBUG) { console.log('results', results); }
 	
 	return results;
 }
@@ -246,7 +265,7 @@ function loop() {
 
 function leds(diody) {
 
-	if (IS_DEBUG) {  console.log('leds', diody); }
+	//if (IS_DEBUG) {  console.log('leds', diody); }
 
 	diody.forEach((dioda, ii) => {
 		let i = (diody.length - 1) - ii;

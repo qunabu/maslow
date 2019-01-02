@@ -21,16 +21,16 @@ const WIN_PIN = 8;
  * */
 
 const PINS_MARGINS = [
-	[495,525], // [wartosc minimum, wartosc maksimum]
-	[405,455], // [wartosc minimum, wartosc maksimum]
-	[495,525], // [wartosc minimum, wartosc maksimum]
-	[465,515], // [wartosc minimum, wartosc maksimum]
-	[495,525], // [wartosc minimum, wartosc maksimum]
+	[465,525], // [wartosc minimum, wartosc maksimum]
+	[465,525], // [wartosc minimum, wartosc maksimum]
+	[465,525], // [wartosc minimum, wartosc maksimum]
+	[465,525], // [wartosc minimum, wartosc maksimum]
+	[465,525], // [wartosc minimum, wartosc maksimum]
 ]
 
 /** co ile milisek apka zczytuje wartosci z urzadzennia */
 
-const INTERVAL = 100;
+const INTERVAL = 200;
 
 /** z ilu wartosci liczy srednia */
 

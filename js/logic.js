@@ -1,3 +1,5 @@
+//const a = require("./hardware.js");
+
 let initState = [
     [0, 0],
     [0, 0, 0],
@@ -11,6 +13,8 @@ let currentState = initState.slice();
 function setChange(change = null) {
     
     if (change) {
+		
+		console.log('change', change);
         
         let newState = currentState.slice();
 
@@ -37,9 +41,37 @@ function setChange(change = null) {
 
             /** pozwol zmienic tylko jezeli poprzedni jest ulozony lub jest pierwszy od dolu */
             if (currentPrevRowState == undefined || currentPrevRowState == 2) {
-                newState[change.y][change.x] = change.to;
+				
+				/** pozwol zmieni jezeli rzad powyzej jest pusty */
+				
+				let sstate = change.state[change.y - 1];
+				
+				let summ = sstate ? sstate.reduce(function(previousValue, currentValue, index, array) {
+					return parseInt(previousValue) + parseInt(currentValue);
+					})  : -1;
+					
+					
+				/**
+				 *  pozwol zmieni jezeli rzad powyzej jest pusty 
+				 * 
+				 */
+				if (summ < 1 || true) { // To mozna wylaczyc 
+				
+					
+					 newState[change.y][change.x] = change.to;
 
-                currentState = newState;
+					currentState = newState;	
+					
+				}
+				
+				
+				
+				
+				//console.log(change.state[change.y - 1]);
+				
+               
+                
+                //console.log(change);
 
             }
         }       
