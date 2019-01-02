@@ -14,11 +14,14 @@ const win = require(PATH + '/../js//hardware_circle').win;
 const winArr = [1,1,1,1,1,2,2,2,2,2];
 let _currArr = [];
 let _currI = -1;
+let _summVols = 0;
 
 function loop() {
 	let change = getChange() ;
 	
 	if (change) {
+		//console.log(change);
+		_summVols = change.summ;
 		if (change.to) {
 			pushCurrArr(change.to);
 		} else {
@@ -27,7 +30,9 @@ function loop() {
 		}
 	}
 	//console.log(fetchValues());
-	const currArr = getCurrArr()
+	const currArr = getCurrArr();
+	
+	//console.log(currArr);
 	if (currArr.length) {
 		if (compare(currArr, winArr)) {
 			setI(currArr.length + 1);
@@ -63,17 +68,26 @@ function popCurrArr(i) {
 
 function setI(i) {
 	
+	//console.log('seti',_currI, i, getCurrArr());
+	
 	win(i == 11) 
 		
     if (i == _currI) {
         return 0;
     }
+    
+    if (_currI == 0) {
+		
+		if (getCurrArr().length != 0) {
+			return;
+		}
+		
+        //_currI = 1;
+        //setTimeout(() => showImage(1), 1000)
+    }
+    
     _currI = i;
     showImage(_currI);
-    if (_currI == 0) {
-        _currI = 1;
-        setTimeout(() => showImage(1), 1000)
-    }
 }
 
 function getI() {
@@ -81,15 +95,24 @@ function getI() {
 }
 
 function reset() {
+	
     if (getCurrArr().length != 0) {
         _currArr = [];
     }
+    //console.log('reset', _summVols);
+    if (_summVols > 1) {
+		 return;
+	}
     setI(1);
 }
 
 function wrong() {
-    _currArr = [];
+   
+   // console.log('wrong', _summVols);
     setI(0);
+    //if (_summVols < 1) {
+		 _currArr = [];
+	//}
 }
 
 function showImage(i=0) {

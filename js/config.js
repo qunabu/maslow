@@ -30,11 +30,11 @@ const PINS_MARGINS = [
 
 /** co ile milisek apka zczytuje wartosci z urzadzennia */
 
-const INTERVAL = 100;
+const INTERVAL = 250;
 
 /** z ilu wartosci liczy srednia */
 
-const AVR_BREAK = 10;
+const AVR_BREAK = 5;
 
 /** jezeli warto odczytu jest mniejsza niz 20 to jest wyjety klocek */
 const ERROR_MARGIN = 20;

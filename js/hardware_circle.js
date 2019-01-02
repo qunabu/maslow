@@ -26,12 +26,18 @@ function win(send = false) {
 
 function getChange() {
 	
-    let newBlockState = convertValuesToArr(fetchValues());
+	let values = fetchValues();
+	
+    let newBlockState = convertValuesToArr(values);
 	
     let change = findDifference(blocksState, newBlockState);
 
     if (change) {
         blocksState = newBlockState;
+        //get all values 
+        change.summ = values.reduce(function(previousValue, currentValue, index, array) {
+		  return parseInt(previousValue) + parseInt(currentValue);
+		})
         return change;
 
     }
@@ -50,11 +56,11 @@ function valueForRow(value) {
 		return 3
 	}
     
-    if (value > 480 && value < 600) {
+    if (value > 500 && value < 520) {
 		return 1;
 	}
 	
-	if (value > 600) {
+	if (value > 514) {
 		return 2;
 	}
 	
@@ -103,12 +109,14 @@ function fetchValues() {
 	/** jezeli ostatni jest wlozony na zero to wyzeruj cala historie */
 
 		
+		
 	avrValues = avrValues.map((row,y) => {
-		if (row[row.length-1] < ERROR_MARGIN) {
+		if (row[row.length-1] < ERROR_MARGIN && row[row.length-2] < ERROR_MARGIN) {
 				return row.map(value => 0)
 		}
 		return row;
 	})
+	
 	
 	
 	
