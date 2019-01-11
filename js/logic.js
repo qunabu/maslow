@@ -1,12 +1,12 @@
 //const a = require("./hardware.js");
 
 let initState = [
-    [0, 0],
-    [0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0]
-];
+/*0*/	[0,0],
+/*1*/	[0,0],
+/*2*/	[0,0],
+/*3*/	[0,0],
+]
+
 
 let currentState = initState.slice();
 
@@ -38,6 +38,8 @@ function setChange(change = null) {
 
             let currentRowsState = analizeValues(currentState);
             let currentPrevRowState = (currentRowsState[ currentRowsState.length - change.y - 2 ]);
+            
+            currentState = newState;	
 
             /** pozwol zmienic tylko jezeli poprzedni jest ulozony lub jest pierwszy od dolu */
             if (currentPrevRowState == undefined || currentPrevRowState == 2) {
@@ -55,14 +57,14 @@ function setChange(change = null) {
 				 *  pozwol zmieni jezeli rzad powyzej jest pusty 
 				 * 
 				 */
-				if (summ < 1 || true) { // To mozna wylaczyc 
+				//if (summ < 1 || true) { // To mozna wylaczyc 
 				
 					
 					 newState[change.y][change.x] = change.to;
 
 					currentState = newState;	
 					
-				}
+				//}
 				
 				
 				
@@ -74,7 +76,9 @@ function setChange(change = null) {
                 //console.log(change);
 
             }
-        }       
+        }      
+        
+        console.log( currentState );
        
     }
 
@@ -104,6 +108,8 @@ function findDifference(arr1, arr2) {
 }
 
 function analizeValues(arr) {
+    
+    //console.log('anal', arr);
 
     let results = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
 
@@ -162,6 +168,8 @@ function analizeValues(arr) {
             }
             return dioda;
         }); //.map((dioda)=> dioda == 1 ? 1 : -1) // jest albo czerowny albo zielony
+        
+        
 
     return results;
 
