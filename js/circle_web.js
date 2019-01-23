@@ -1,6 +1,8 @@
 const $ = require('jquery');
 const _ = require('lodash');
 const path = require('path');
+const exec = require('child_process').exec;
+
 
 const PATH = path.join(__dirname);
 const INTERVAL = require(PATH + '/../js/config').INTERVAL;

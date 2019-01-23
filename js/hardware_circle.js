@@ -16,6 +16,30 @@ let avrValues = Array.from({length: 10}, (v, k) => []);
 let blocksState = Array.from({length: 10}, (v, k) => 0); 
 //avrValues = avrValues.map(row => []);
 
+
+let isWon = undefined;
+
+function win(send = false) {
+		
+	if (isWon != send) {
+		if (send === true) {
+			//console.log('wlacz');
+			//wlacz beacons
+			exec('/home/pi/maslow/beacony_skrypty/Herzberg/wlaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+		} else if (send === false) {
+			//console.log('wylacz');
+			exec('/home/pi/maslow/beacony_skrypty/Herzberg/wylaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+			//wylacz beacon
+		}
+	}
+	isWon = send;
+	return;
+
+}
+
+/*
 function win(send = false) {
 	if (send) {
 		winPin.writeSync(1);
@@ -23,6 +47,7 @@ function win(send = false) {
 		winPin.writeSync(0);
 	}	
 }
+*/
 
 function getChange() {
 	
