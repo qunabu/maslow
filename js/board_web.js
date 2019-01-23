@@ -1,6 +1,9 @@
 const $ = require('jquery');
 const _ = require('lodash');
 const path = require('path');
+const exec = require('child_process').exec;
+
+
 
 const PATH = path.join(__dirname);
 const INTERVAL = require(PATH + '/../js/config').INTERVAL;
@@ -16,7 +19,7 @@ const WIN_PIN = require(PATH + '/../js/config').WIN_PIN;
 
 /** to jest wartosc sprawdzajaca odchylenie !!! */
 
-const ERROR_MARGIN = 45;
+const ERROR_MARGIN = 50;
 
 /** tablica read only do czytania wartosci */
 const arr = [
@@ -31,15 +34,26 @@ const arr = [
 /** na ktory pin ma sie wysylac po wygranej !!! */
 const winPin = new Gpio(WIN_PIN, 'out');
 
-
+let isWon = undefined;
 
 function win(send = false) {
-	if (send) {
-		//console.log('wygrales');
-		winPin.writeSync(1);
-	} else {
-		winPin.writeSync(0);
-	}	
+		
+	if (isWon != send) {
+		if (send === true) {
+			//console.log('wlacz');
+			//wlacz beacons
+			exec('/home/pi/maslow/beacony_skrypty/McGregor/wlaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+		} else if (send === false) {
+			console.log('wylacz');
+			//exec('/home/pi/maslow/beacony_skrypty/McGregor/wylaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+			//wylacz beacon
+		}
+	}
+	isWon = send;
+	return;
+
 }
 
 function loop() {
@@ -67,7 +81,7 @@ board_web.js:47 2 5 510 512 1
 		
 	
 	showImage(i);
-	
+		
 	win(i == arr.length);
 		
 	return;	

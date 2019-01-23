@@ -14,7 +14,7 @@ function createWindow () {
   mainWindow.loadURL('file://' + startHTML);
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
    
