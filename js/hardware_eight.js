@@ -9,6 +9,8 @@ const PINS_MARGINS = [500,530];
 const AVR_BREAK = require("./config.js").AVR_BREAK;
 const ERROR_MARGIN = require("./config.js").ERROR_MARGIN;
 
+const exec = require('child_process').exec;
+let isWon = undefined;
 
 /** RESZTY KODU NIE RUSZAJCIE */
 
@@ -22,6 +24,8 @@ const ledPins = [
   [new Gpio(13, 'out'),new Gpio(16, 'out')],	
 	
 ];
+
+ledPins.reverse();
 
 
 const winPin = new Gpio(WIN_PIN, 'out')
@@ -106,51 +110,30 @@ function fetchValues() {
     /*
     return [mcp1].map(mcp => {
 	return [0,1,2,3,4,5,6,7].map(i => {
-	    return mcp.pins[i].getDecimalValue();
+	    return `${i} ${mcp.pins[i].getDecimalValue()}`;
 	})
     })
-    */ 
+    * */
+     
         
 
 	
 	/** TODO push values into array and remove remove tail */
 	
-	/*
-	let values = arr.slice(0);// copy of the original array structure;
-	values[4][5] = mcp1.pins[0].getDecimalValue();
-    values[4][4] = mcp1.pins[1].getDecimalValue();
-    values[4][3] = mcp1.pins[2].getDecimalValue();
-    values[4][2] = mcp1.pins[3].getDecimalValue();
-    values[4][1] = mcp1.pins[4].getDecimalValue();
-    values[4][0] = mcp1.pins[5].getDecimalValue();
-    values[3][4] = mcp1.pins[6].getDecimalValue();
-    values[3][3] = mcp1.pins[7].getDecimalValue();
-    values[3][2] = mcp2.pins[0].getDecimalValue();
-    values[3][1] = mcp2.pins[1].getDecimalValue();
-    values[3][0] = mcp2.pins[2].getDecimalValue();
-    values[2][3] = mcp2.pins[3].getDecimalValue();
-    values[2][2] = mcp2.pins[4].getDecimalValue();
-    values[2][1] = mcp2.pins[5].getDecimalValue();
-    values[2][0] = mcp2.pins[6].getDecimalValue();
-    values[1][2] = mcp2.pins[7].getDecimalValue();
-    values[1][1] = mcp3.pins[0].getDecimalValue();
-    values[1][0] = mcp3.pins[1].getDecimalValue();
-    values[0][1] = mcp3.pins[2].getDecimalValue();
-    values[0][0] = mcp3.pins[3].getDecimalValue();
-    */ 
+	
     
 
-    avrValues[3][1].push( mcp1.pins[7].getDecimalValue() );
-    avrValues[3][0].push( mcp1.pins[6].getDecimalValue() );
+    avrValues[3][1].push( mcp1.pins[0].getDecimalValue() );
+    avrValues[3][0].push( mcp1.pins[1].getDecimalValue() );
 
-    avrValues[2][1].push( mcp1.pins[5].getDecimalValue() );
-    avrValues[2][0].push( mcp1.pins[4].getDecimalValue() );
+    avrValues[2][1].push( mcp1.pins[2].getDecimalValue() );
+    avrValues[2][0].push( mcp1.pins[3].getDecimalValue() );
     
-    avrValues[1][1].push( mcp1.pins[3].getDecimalValue() );
-    avrValues[1][0].push( mcp1.pins[2].getDecimalValue() );
+    avrValues[1][1].push( mcp1.pins[4].getDecimalValue() );
+    avrValues[1][0].push( mcp1.pins[5].getDecimalValue() );
     
-    avrValues[0][1].push( mcp1.pins[1].getDecimalValue() );
-    avrValues[0][0].push( mcp1.pins[0].getDecimalValue() );
+    avrValues[0][1].push( mcp1.pins[6].getDecimalValue() );
+    avrValues[0][0].push( mcp1.pins[7].getDecimalValue() );
     
     if (avrValues[0][0].length > AVR_BREAK) {
 
@@ -253,6 +236,27 @@ function leds(diody) {
 			default:
 		}
 	})		
+	
+	
+	let send = diody.filter(dioda => dioda == 2).length == diody.length;
+	
+	if (isWon != send) {
+		if (send === true) {
+			//console.log('wlacz');
+			//wlacz beacons
+			exec('/home/pi/maslow/beacony_skrypty/Pygmalion/wlaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+		} else if (send === false) {
+			console.log('wylacz');
+			exec('/home/pi/maslow/beacony_skrypty/Pygmalion/wylaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+			//wylacz beacon
+		}
+	}
+	
+	isWon = send;
+	
+	return;
 	
 	if (diody.filter(dioda => dioda == 2).length == diody.length) {
 		winPin.writeSync(1);
