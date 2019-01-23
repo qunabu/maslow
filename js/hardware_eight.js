@@ -9,6 +9,8 @@ const PINS_MARGINS = [500,530];
 const AVR_BREAK = require("./config.js").AVR_BREAK;
 const ERROR_MARGIN = require("./config.js").ERROR_MARGIN;
 
+const exec = require('child_process').exec;
+let isWon = undefined;
 
 /** RESZTY KODU NIE RUSZAJCIE */
 
@@ -252,7 +254,27 @@ function leds(diody) {
 				ledPins[i][1].writeSync(0);//wylacz zielony
 			default:
 		}
-	})		
+	})	
+	
+	let send = diody.filter(dioda => dioda == 2).length == diody.length;
+	
+	if (isWon != send) {
+		if (send === true) {
+			//console.log('wlacz');
+			//wlacz beacons
+			exec('/home/pi/maslow/beacony_skrypty/Pygmalion/wlaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+		} else if (send === false) {
+			console.log('wylacz');
+			exec('/home/pi/maslow/beacony_skrypty/Pygmalion/wylaczBeacon.sh', 
+			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
+			//wylacz beacon
+		}
+	}
+	
+	isWon = send;
+	
+	return;		
 	
 	if (diody.filter(dioda => dioda == 2).length == diody.length) {
 		winPin.writeSync(1);
