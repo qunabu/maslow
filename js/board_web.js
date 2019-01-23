@@ -45,8 +45,8 @@ function win(send = false) {
 			exec('/home/pi/maslow/beacony_skrypty/McGregor/wlaczBeacon.sh', 
 			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
 		} else if (send === false) {
-			console.log('wylacz');
-			//exec('/home/pi/maslow/beacony_skrypty/McGregor/wylaczBeacon.sh', 
+			//console.log('wylacz');
+			exec('/home/pi/maslow/beacony_skrypty/McGregor/wylaczBeacon.sh', 
 			(er, stdout, stderr) => console.log(er, stdout, stderr)); 
 			//wylacz beacon
 		}
