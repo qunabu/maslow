@@ -9,17 +9,43 @@ const PATH = path.join(__dirname);
 const INTERVAL = require(PATH + '/../js/config').INTERVAL;
 //const INTERVAL = 1000;
 const IS_DEBUG = false;
+const ERROR_MARGIN = 20;
+const AVR_BREAK = 10;
 
 const mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
 const mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
 
 const Gpio = require('onoff').Gpio;
 
-const WIN_PIN = require(PATH + '/../js/config').WIN_PIN;
-
 /** to jest wartosc sprawdzajaca odchylenie !!! */
 
-const ERROR_MARGIN = 50;
+function avr(avrValues) {
+	
+
+	/** wylicz srednia, 
+	 * ale ignoruj wartosci zerowe !!!
+	 * jezeli sa same zero to zwroc zero
+	 *  */
+	 
+	if (avrValues[avrValues.length-1] < ERROR_MARGIN) {
+		return 0;
+	}
+		
+	
+	let result = avrValues.filter(value => value > ERROR_MARGIN);
+	
+	if (result.length) {
+		
+		return result.reduce(function(previousValue, currentValue, index, array) {
+		  return parseInt(previousValue) + parseInt(currentValue);
+		}) / result.length;	
+		
+	} else {
+		
+		return 0;
+	}
+						
+}
 
 /** tablica read only do czytania wartosci */
 const arr = [
@@ -31,8 +57,6 @@ const arr = [
 	[ { x:0, y:5, v:540, pin:mcp1.pins[7]  }, { x:2, y:5, v:510, pin:mcp2.pins[0]  } ],
 ]
 
-/** na ktory pin ma sie wysylac po wygranej !!! */
-const winPin = new Gpio(WIN_PIN, 'out');
 
 let isWon = undefined;
 
@@ -63,18 +87,19 @@ function loop() {
 			if (IS_DEBUG) {
 				console.log(row.x, row.y, row.v, row.pin.getDecimalValue(), Math.abs(row.pin.getDecimalValue() - row.v));
 			}
-			/**
-			 *
-			 * 1 0 510 511 1
-board_web.js:47 0 1 510 510 1
-board_web.js:47 1 1 510 510 1
-board_web.js:47 2 1 510 511 1
-board_web.js:47 0 2 508 509 1
-board_web.js:47 2 3 512 503 12
-board_web.js:47 1 4 420 385 33
-board_web.js:47 0 5 580 537 31
-board_web.js:47 2 5 510 512 1
-			 */  
+			if (typeof row.arr == 'undefined') {
+				row.arr = [];
+			}
+			if (row.arr.length > AVR_BREAK) {
+				row.arr.shift( );
+			}
+			row.arr.push(row.pin.getDecimalValue());
+			row.avr = avr(row.arr);
+			
+			//console.log(row.avr);
+			
+			
+			return Math.abs(row.avr - row.v) < ERROR_MARGIN;		
 			return Math.abs(row.pin.getDecimalValue() - row.v) < ERROR_MARGIN;			
 		}).length;			
 	}).length;
