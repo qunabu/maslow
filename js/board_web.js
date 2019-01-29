@@ -53,8 +53,8 @@ const arr = [
 	[ { x:0, y:1, v:510, pin:mcp1.pins[1]  }, { x:1, y:1, v:510, pin:mcp1.pins[2]  }, { x:2, y:1, v:510, pin:mcp1.pins[3]  } ],
 	[ { x:0, y:2, v:508, pin:mcp1.pins[4]  } ],
 	[ { x:2, y:3, v:500, pin:mcp1.pins[5]  } ],
-	[ { x:1, y:4, v:390, pin:mcp1.pins[6]  } ],
-	[ { x:0, y:5, v:540, pin:mcp1.pins[7]  }, { x:2, y:5, v:510, pin:mcp2.pins[0]  } ],
+	[ { x:1, y:4, v:420, pin:mcp1.pins[6]  } ],
+	[ { x:0, y:5, v:580, pin:mcp1.pins[7]  }, { x:2, y:5, v:510, pin:mcp2.pins[0]  } ],
 ]
 
 
@@ -97,6 +97,8 @@ function loop() {
 			row.avr = avr(row.arr);
 			
 			//console.log(row.avr);
+			
+			console.log(`x:${row.x} y:${row.y}`, row.pin.getDecimalValue());
 			
 			
 			return Math.abs(row.avr - row.v) < ERROR_MARGIN;		
