@@ -13,16 +13,15 @@ let currentState = initState.slice();
 function setChange(change = null) {
     
     if (change) {
-		
-		console.log('change', change);
-        
+		        
         let newState = currentState.slice();
 
-        if (change.to == -1 || change.to == 0) {
+        if ((change.to == -1 || change.to == 0) && false) {
             /** zaznacz wszystkie do gory jako 0 */
 
             newState[change.y][change.x] = change.to;
-
+            
+            /*
             newState = newState.map((row,y) => {
                 return row.map((value,x) => {
                     if (y < change.y) {
@@ -31,6 +30,7 @@ function setChange(change = null) {
                     return value;
                 });
             });
+            */ 
 
             currentState = newState;
 
@@ -42,7 +42,7 @@ function setChange(change = null) {
             currentState = newState;	
 
             /** pozwol zmienic tylko jezeli poprzedni jest ulozony lub jest pierwszy od dolu */
-            if (currentPrevRowState == undefined || currentPrevRowState == 2) {
+            if (currentPrevRowState == undefined || currentPrevRowState == 2 || true) {
 				
 				/** pozwol zmieni jezeli rzad powyzej jest pusty */
 				
@@ -66,19 +66,10 @@ function setChange(change = null) {
 					
 				//}
 				
-				
-				
-				
-				//console.log(change.state[change.y - 1]);
-				
-               
-                
-                //console.log(change);
 
             }
         }      
         
-        console.log( currentState );
        
     }
 
@@ -108,18 +99,19 @@ function findDifference(arr1, arr2) {
 }
 
 function analizeValues(arr) {
-    
-    //console.log('anal', arr);
 
     let results = arr.map((value, index, array) => { // sprawdza czy sa wszystkie w rzedzie od gory do dolu
 
-            let ilosc_zaznaczoncyh = value.filter(i => i != 0).length;
+            //let ilosc_zaznaczoncyh = value.filter(i => i != 1).length;
+            let ilosc_zaznaczoncyh = value.length;
             let ilosc_poprawnych = value.filter(i => i == 1).length;
-            let ilosc_niepoprawnych = value.filter(i => i == -1).length;
-
+            //let ilosc_niepoprawnych = value.filter(i => i == -1).length;
+            
+            /*
             if (ilosc_niepoprawnych > 0) {
                 return 1;
             }
+            */ 
 
             if (ilosc_zaznaczoncyh == value.length) {
                 if (ilosc_poprawnych == value.length) {
@@ -128,10 +120,14 @@ function analizeValues(arr) {
                 return 1; // nie jest ok
             }
 
+            /*
             if (ilosc_niepoprawnych == 0 && ilosc_poprawnych > 0) {
                 return 1; // zawsze zle 
                 //return 3; // klocek jest polozony w dobrym rzedzie ale trzeba sprawdzic czy porzedni rzad jest ok, bo jak nie to ma czerwono go 
             }
+            */
+            
+            
 
             return 1; // zawsze zle;
             //return 0; // nie sa wszystkie polozone klocki 
@@ -139,7 +135,7 @@ function analizeValues(arr) {
         })
 
         .reverse() // odwraca tablice
-
+        /*
         .map((dioda, index, array) => { // sprawdza czy sa po kolei 
             if (index == 0) {
                 return dioda;
@@ -148,16 +144,22 @@ function analizeValues(arr) {
             if (prevDioda == 2 && dioda == 2) { // jezeli poprzedni rzad  jest 2 i ten jest  2 to ok
                 return 2;
             }
+            
+            return 1;
 
+            
             if (prevDioda != 2 && dioda == 3) { // klocek jest polozony w dobrym rzedzie ale trzeba sprawdzic czy porzedni rzad jest ok, bo jak nie to ma czerwono go 
                 return 1;
             }
 
 
+
             dioda = dioda == 2 ? 1 : dioda; // jezeli ten jest 2 to zamien na 1
             return dioda;
         })
+        */ 
 
+        /*
         .map((dioda, index, array) => { // sprawdza czy sa po kolei                 
             if (index && dioda > 0 && array[index - 1] != 2) {
                 return 1;
@@ -168,8 +170,14 @@ function analizeValues(arr) {
             }
             return dioda;
         }); //.map((dioda)=> dioda == 1 ? 1 : -1) // jest albo czerowny albo zielony
+        */ 
         
+    var firstThatFails = results.indexOf(1);
         
+    if (firstThatFails > -1) {
+    
+        return results.map((value,i) => i >= firstThatFails ? 1 : value);
+    }
 
     return results;
 

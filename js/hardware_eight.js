@@ -5,9 +5,33 @@ const findDifference = require("./logic.js").findDifference;
 const initState = require("./logic.js").initState;
 
 const WIN_PIN = require("./config.js").WIN_PIN;
-const PINS_MARGINS = [500,530];
+
 const AVR_BREAK = require("./config.js").AVR_BREAK;
 const ERROR_MARGIN = require("./config.js").ERROR_MARGIN;
+
+const PINS_MARGINS = 
+[
+    [
+	[ 510-ERROR_MARGIN, 510+ERROR_MARGIN ],
+	[ 513-ERROR_MARGIN, 513+ERROR_MARGIN ],
+    ],
+    [
+	[ 512-ERROR_MARGIN, 512+ERROR_MARGIN ],
+	[ 520-ERROR_MARGIN, 520+ERROR_MARGIN ],
+    ],
+    [
+	[ 407-ERROR_MARGIN, 407+ERROR_MARGIN ],
+	[ 466-ERROR_MARGIN, 466+ERROR_MARGIN ],
+	
+    ],
+    [
+	
+	[ 570-ERROR_MARGIN, 570+ERROR_MARGIN ],
+	[ 600-ERROR_MARGIN, 600+ERROR_MARGIN ],
+    ]
+];
+
+PINS_MARGINS.reverse();
 
 const exec = require('child_process').exec;
 let isWon = undefined;
@@ -95,13 +119,14 @@ function getChange() {
  * - 1 - jest wlozony zly klocek 
  * - 2 - jest wlozony dobry klocek 
  */ 
-function valueForRow(i, value) {
+function valueForRow(y, x, value) {
 	
 	if (value < ERROR_MARGIN) {
 		return 0; 
-	} 
+	}
 	
-	return value > PINS_MARGINS[0] && value < PINS_MARGINS[1] ? 1 : -1;
+	
+	return value > PINS_MARGINS[y][x][0] && value < PINS_MARGINS[y][x][1] ? 1 : -1;
     		
 }
 
@@ -109,11 +134,17 @@ function fetchValues() {
     
     /*
     return [mcp1].map(mcp => {
-	return [0,1,2,3,4,5,6,7].map(i => {
-	    return `${i} ${mcp.pins[i].getDecimalValue()}`;
-	})
+	
     })
-    * */
+  
+    
+    var test = [0,1,2,3,4,5,6,7].map(i => {
+	    return `${i} ${mcp1.pins[i].getDecimalValue()}`;
+	})
+	
+	console.log(test);
+	* 
+	*   * */
      
         
 
@@ -203,7 +234,8 @@ function fetchValues() {
 }
 
 function convertValuesToArr() {
-	let results = fetchValues().map((row,y) => row.map((value,x) => valueForRow(y, value)));
+	let i = 0;
+	let results = fetchValues().map((row,y) => row.map((value,x) => valueForRow(y,x, value)));
 	
 	//if (IS_DEBUG) { console.log('results', results); }
 	
