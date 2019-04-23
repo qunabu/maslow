@@ -7,7 +7,7 @@
 * for electron use version globally `8.0.0` `nvm default 8.0.0`
 
 ## Installation tutorial 
-1. clone files to main folder `git clone git@github.com:qunabucom/maslow.git`
+1. clone files to main folder `git clone git@github.com:qunabucom/maslow.git` (all files should be in `/home/pi/maslow`)
 2. install dependencies 
 * `cd maslow`
 * `npm install`
