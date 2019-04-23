@@ -1,13 +1,30 @@
 # reqs
-* node version 8.12
-* for electron 8.0.0 installed with `nvm` (/home/pi/.nvm/versions/node/v8.0.0/bin/node)
+* node version 8.12 (google 'install node on raspian')
+* for electron (devices that use touchscreen) 8.0.0 installed with `nvm` (/home/pi/.nvm/versions/node/v8.0.0/bin/node)
+* for electron use version globally `8.0.0` `nvm default 8.0.0`
+
 # install 
+1. clone files to main folder `git clone git@github.com:qunabucom/maslow.git`
+2. install dependencies 
 * `cd maslow`
 * `npm install`
-# startup script 
+3. run each device with `.sh` script in main folder 
 
+# startup script 
 1. `nano ~/.config/lxsession/LXDE-pi/autostart` 
-2. add there line
+2. add there line at the end of the file depening on the machine 
+`@lxterminal -e /home/pi/maslow/pygmalion1.sh`
 `@lxterminal -e /home/pi/maslow/pygmalion2.sh`
-3. in `start.sh` put 
-`/usr/bin/node /home/pi/maslow/pygmalion2.js`
+`@lxterminal -e /home/pi/maslow/board.sh`
+`@lxterminal -e /home/pi/maslow/piramida.sh`
+`@lxterminal -e /home/pi/maslow/circle.sh`
+
+# config 
+* all files are independent and are in the folders attached to machine name `pygmalion1`, `pygmalion2`, `board`, `piramida`, `circle`, 
+* documenation is in folder `doc` in each of the above 
+
+# testing 
+* there is global `test.sh` script to get the decimal results of all the `mcp3008`s. 
+
+# desktop shortcuts 
+* copy all `*.desktop` files to `/home/pi/Desktop` to get desktop shortcuts
