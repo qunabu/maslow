@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Test
+Comment=My application which does this
+Icon=/usr/share/pixmaps/openbox.xpm
+Exec=/usr/bin/node /home/pi/maslow/test_hard.js 
+Type=Application
+Encoding=UTF-8
+Terminal=true
+Categories=None;
