@@ -1,7 +1,7 @@
 # reqs
 * `SPI` enabled
 * node version 8.12 (google 'install node on raspian')
-* for electron (devices that use touchscreen) 8.0.0 installed with `nvm` (/home/pi/.nvm/versions/node/v8.0.0/bin/node)
+* for electron (devices that use touchscreen) 8.0.0 installed with `nvm` (`/home/pi/.nvm/versions/node/v8.0.0/bin/node` is being called by scripts)
 * for electron use version globally `8.0.0` `nvm default 8.0.0`
 
 # install 
@@ -32,8 +32,8 @@
 * copy all `*.desktop` files to `/home/pi/Desktop` to get desktop shortcuts
 
 # default `mcp3008` settings
-* (onoff)[https://www.npmjs.com/package/onoff]
-```
+* [onoff](https://www.npmjs.com/package/onoff) documention
+```javascript
 const mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
 const mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
 const mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
