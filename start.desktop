@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=My Name
+Name=Start app
 Comment=My application which does this
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=/usr/bin/node /home/pi/maslow/eight.js 
+Exec=/usr/bin/node /home/pi/maslow/pygmalion1.js 
 Type=Application
 Encoding=UTF-8
 Terminal=true
