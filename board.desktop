@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Board
+Comment=My comment
+Icon=/usr/share/pixmaps/openbox.xpm
+Exec=/home/pi/maslow/board.sh
+Type=Application
+Encoding=UTF-8
+Terminal=true
+Categories=None;
+Name[en_GB]=box-raspberry
