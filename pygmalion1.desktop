@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Start app
+Name=pygmalion1
 Comment=My application which does this
 Icon=/usr/share/pixmaps/openbox.xpm
 Exec=/usr/bin/node /home/pi/maslow/pygmalion1.js 
