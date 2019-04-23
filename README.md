@@ -1,5 +1,6 @@
 # reqs
 * node version 8.12
+* for electron 8.0.0 installed with `nvm` (/home/pi/.nvm/versions/node/v8.0.0/bin/node)
 # install 
 * `cd maslow`
 * `npm install`
