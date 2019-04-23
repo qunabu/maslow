@@ -17,11 +17,13 @@
 To make the app run on startup of the raspian to the following
 1. Edit autostart script with `nano ~/.config/lxsession/LXDE-pi/autostart` 
 2. Add there *one line* at the end of the file depening on the machine 
-`@lxterminal -e /home/pi/maslow/pygmalion1.sh`
-`@lxterminal -e /home/pi/maslow/pygmalion2.sh`
-`@lxterminal -e /home/pi/maslow/board.sh`
-`@lxterminal -e /home/pi/maslow/piramida.sh`
-`@lxterminal -e /home/pi/maslow/circle.sh`
+```bash
+@lxterminal -e /home/pi/maslow/pygmalion1.sh
+@lxterminal -e /home/pi/maslow/pygmalion2.sh
+@lxterminal -e /home/pi/maslow/board.sh
+@lxterminal -e /home/pi/maslow/piramida.sh
+@lxterminal -e /home/pi/maslow/circle.sh
+```
 
 ## Configuration
 * all files are independent and are in the folders attached to machine name `pygmalion1`, `pygmalion2`, `board`, `piramida`, `circle`, 
