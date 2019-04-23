@@ -37,7 +37,7 @@ function createWindow () {
   //mainWindow.show();
 
   // and load the index.html of the app.
-  let startHTML = path.join(__dirname, 'assets', 'circle.html');
+  let startHTML = path.join(__dirname, 'circle/assets', 'circle.html');
 
   //console.log(startHTML);
   
@@ -46,7 +46,8 @@ function createWindow () {
   mainWindow.loadURL('file://' + startHTML);
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+	// AAAAAHAHA odokmenytuj to lini dla testow
+ //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

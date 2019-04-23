@@ -1,6 +1,6 @@
 
-const mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
-const mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
+const mcp1 = require('simple-mcp3008')(18,24,23,27,3.3);
+const mcp2 = require('simple-mcp3008')(18,24,23,17,3.3);
 const mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
 const Gpio = require('onoff').Gpio;
 const path = require('path');

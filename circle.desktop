@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Circle 
+Comment=My application which does this
+Icon=/usr/share/pixmaps/openbox.xpm
+Exec=/home/pi/.nvm/versions/node/v8.0.0/bin/node /home/pi/maslow/node_modules/.bin/electron /home/pi/maslow/circle.js
+Type=Application
+Encoding=UTF-8
+Terminal=false
+Categories=None;
