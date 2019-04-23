@@ -26,15 +26,15 @@ To make the app run on startup of the raspian to the following
 ```
 
 ## Configuration
-* all files are independent and are in the folders attached to machine name `pygmalion1`, `pygmalion2`, `board`, `piramida`, `circle`, 
-* most of the config are in `config.js` files
-* documenation is in folder `doc` in each of the above 
+* All files are independent and are in the folders attached to machine name `pygmalion1`, `pygmalion2`, `board`, `piramida` or `circle`.
+* Most of the config are in `config.js` files
+* Documenation is in folder `doc` in each of the above 
 
 ## Testing 
 * There is global `test.sh` script to get the decimal results of all the `mcp3008`s. If this shows 0s from top to bottom, then wireing is fucked. 
 
 ## Desktop shortcuts 
-* copy all `*.desktop` files to `/home/pi/Desktop` to get desktop shortcuts
+* Copy all `*.desktop` files to `/home/pi/Desktop` to get desktop shortcuts
 
 ## Default `mcp3008` settings
 * [onoff](https://www.npmjs.com/package/onoff) documention
