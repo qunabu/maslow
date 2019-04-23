@@ -1,4 +1,5 @@
 # reqs
+* `SPI` enabled
 * node version 8.12 (google 'install node on raspian')
 * for electron (devices that use touchscreen) 8.0.0 installed with `nvm` (/home/pi/.nvm/versions/node/v8.0.0/bin/node)
 * for electron use version globally `8.0.0` `nvm default 8.0.0`
@@ -21,6 +22,7 @@
 
 # config 
 * all files are independent and are in the folders attached to machine name `pygmalion1`, `pygmalion2`, `board`, `piramida`, `circle`, 
+* most of the config are in `config.js` files
 * documenation is in folder `doc` in each of the above 
 
 # testing 
@@ -28,3 +30,11 @@
 
 # desktop shortcuts 
 * copy all `*.desktop` files to `/home/pi/Desktop` to get desktop shortcuts
+
+# default `mcp3008` settings
+* (onoff)[https://www.npmjs.com/package/onoff]
+```
+const mcp1 = require('simple-mcp3008')(18,24,23,17,3.3);
+const mcp2 = require('simple-mcp3008')(18,24,23,27,3.3);
+const mcp3 = require('simple-mcp3008')(18,24,23,25,3.3);
+```
