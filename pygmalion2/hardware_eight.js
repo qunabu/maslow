@@ -25,6 +25,8 @@ const ledPins = [
 	
 ];
 
+ledPins.reverse();
+
 
 const winPin = new Gpio(WIN_PIN, 'out')
 
@@ -142,17 +144,17 @@ function fetchValues() {
     */ 
     
 
-    avrValues[3][1].push( mcp1.pins[7].getDecimalValue() );
-    avrValues[3][0].push( mcp1.pins[6].getDecimalValue() );
+    avrValues[3][1].push( mcp1.pins[0].getDecimalValue() );
+    avrValues[3][0].push( mcp1.pins[1].getDecimalValue() );
 
-    avrValues[2][1].push( mcp1.pins[5].getDecimalValue() );
-    avrValues[2][0].push( mcp1.pins[4].getDecimalValue() );
+    avrValues[2][1].push( mcp1.pins[2].getDecimalValue() );
+    avrValues[2][0].push( mcp1.pins[3].getDecimalValue() );
     
-    avrValues[1][1].push( mcp1.pins[3].getDecimalValue() );
-    avrValues[1][0].push( mcp1.pins[2].getDecimalValue() );
+    avrValues[1][1].push( mcp1.pins[4].getDecimalValue() );
+    avrValues[1][0].push( mcp1.pins[5].getDecimalValue() );
     
-    avrValues[0][1].push( mcp1.pins[1].getDecimalValue() );
-    avrValues[0][0].push( mcp1.pins[0].getDecimalValue() );
+    avrValues[0][1].push( mcp1.pins[6].getDecimalValue() );
+    avrValues[0][0].push( mcp1.pins[7].getDecimalValue() );
     
     if (avrValues[0][0].length > AVR_BREAK) {
 
